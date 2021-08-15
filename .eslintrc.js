@@ -31,7 +31,7 @@ module.exports = {
     "react/require-default-props": "off",
     "@typescript-eslint/no-unused-vars": [
       "error",
-      { varsIgnorePattern: "^_d+" },
+      { varsIgnorePattern: "^_.*", argsIgnorePattern: "^_.*" },
     ],
     "import/no-extraneous-dependencies": [
       "error",
