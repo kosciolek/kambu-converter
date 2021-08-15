@@ -3,6 +3,7 @@ import { ReactNode, useMemo, useState } from "react";
 import { animated, useSpring } from "react-spring";
 import { useClickOutside } from "../../hooks/useClickOutside";
 import { useControlled } from "../../hooks/useControlled";
+import { Label } from "../Label";
 import arrow from "./arrow.svg";
 import { Options } from "./Options";
 import { OptionType, SelectValue } from "./types";
@@ -17,6 +18,7 @@ export type SelectProps = {
   open?: boolean;
   onOpenChange?: (newOpen: boolean) => void;
   placeholder?: ReactNode;
+  label?: string;
 };
 
 export const Select = ({
@@ -24,6 +26,7 @@ export const Select = ({
   value: valueProp,
   width = "220px",
   options,
+  label,
   open: openProp,
   onOpenChange: onOpenChangeProp,
   placeholder,
@@ -55,26 +58,29 @@ export const Select = ({
   );
 
   return (
-    <Root
-      tabIndex={0}
-      width={width}
-      onClick={(e) => {
-        if (!optionsElem || !optionsElem.contains(e.target as HTMLElement))
-          onOpenChange(!open);
-      }}
-      ref={setRootElem}
-    >
-      <Value>{valueNode}</Value>
-      <Arrow style={arrowSpring} />
-      <Options
-        value={value}
-        onChange={onChange}
-        open={open}
-        options={options}
-        rootElement={rootElem}
+    <Root>
+      <StyledLabel>{label || " "}</StyledLabel>
+      <Wrapper
+        tabIndex={0}
         width={width}
-        ref={setOptionsElem}
-      />
+        onClick={(e) => {
+          if (!optionsElem || !optionsElem.contains(e.target as HTMLElement))
+            onOpenChange(!open);
+        }}
+        ref={setRootElem}
+      >
+        <Value>{valueNode}</Value>
+        <Arrow style={arrowSpring} />
+        <Options
+          value={value}
+          onChange={onChange}
+          open={open}
+          options={options}
+          rootElement={rootElem}
+          width={width}
+          ref={setOptionsElem}
+        />
+      </Wrapper>
     </Root>
   );
 };
@@ -88,7 +94,16 @@ const useArrowSpring = (open: boolean) =>
     },
   });
 
-export const Root = styled.div<{ width: string }>`
+export const Root = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+export const StyledLabel = styled(Label)`
+  margin-bottom: 4px;
+`;
+
+export const Wrapper = styled.div<{ width: string }>`
   display: inline-flex;
   align-items: center;
 
