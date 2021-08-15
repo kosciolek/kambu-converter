@@ -6,7 +6,7 @@ import reportWebVitals from "./reportWebVitals";
 
 ReactDOM.render(
   <React.StrictMode>
-    <Config>
+    <Config persist>
       <App />
     </Config>
   </React.StrictMode>,
