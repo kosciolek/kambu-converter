@@ -26,28 +26,30 @@ export const useLiveExchange = () => {
   const query = useCurrencyRates();
   const { data } = query;
 
-  const exchange = useMemo(() => {
-    return ({
-      amount,
-      from,
-      to,
-      format,
-    }: {
-      amount: number;
-      from: Currency;
-      to: Currency;
-      format?: boolean;
-    }) => {
-      if (!data) return null;
+  const exchange = useMemo(
+    () =>
+      ({
+        amount,
+        from,
+        to,
+        format,
+      }: {
+        amount: number;
+        from: Currency;
+        to: Currency;
+        format?: boolean;
+      }) => {
+        if (!data) return null;
 
-      const fromRate = data.rates[from]!;
-      const toRate = data.rates[to]!;
+        const fromRate = data.rates[from]!;
+        const toRate = data.rates[to]!;
 
-      const result = amount * (toRate / fromRate);
+        const result = amount * (toRate / fromRate);
 
-      return format ? formatCurrency(result) : result;
-    };
-  }, [data]);
+        return format ? formatCurrency(result) : result;
+      },
+    [data]
+  );
 
   return { exchange, ...query };
 };
