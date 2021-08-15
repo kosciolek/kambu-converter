@@ -11,6 +11,9 @@ export const getTransactionById =
 
 export const getSelf = (state: RootState) => state.exchange;
 
+export const getTransactionsEmpty = (state: RootState) =>
+  state.exchange.transactions.length === 0;
+
 export const getHighest = createSelector([getTransactions], (transactions) => {
   const copy = [...transactions];
   /* todo More efficient, without sorting */
