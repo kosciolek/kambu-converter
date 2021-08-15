@@ -7,7 +7,6 @@ import { zIndex } from "../../style/const";
 
 export type DialogRenderFunc = (args: {
   open: () => void;
-  toggle: () => void;
   close: () => void;
   set: (state: boolean) => void;
 }) => ReactNode;
@@ -15,17 +14,23 @@ export type DialogRenderFunc = (args: {
 export type DialogProps = {
   action: DialogRenderFunc;
   content: DialogRenderFunc;
+  onClose?: () => void;
 };
 
-export const Dialog = ({ action, content }: DialogProps) => {
+export const Dialog = ({ action, content, onClose }: DialogProps) => {
   const [open, setOpen] = useState(false);
 
   const dialogMethods = useMemo(
     () => ({
       open: () => setOpen(true),
-      toggle: () => setOpen((prev) => !prev),
-      close: () => setOpen(false),
-      set: (state: boolean) => setOpen(state),
+      close: () => {
+        onClose?.();
+        setOpen(false);
+      },
+      set: (state: boolean) => {
+        if (!state) onClose?.();
+        setOpen(state);
+      },
     }),
     []
   );
