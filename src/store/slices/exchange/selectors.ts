@@ -4,6 +4,7 @@ import { Transaction } from "./types";
 
 export const getTransactions = (state: RootState) =>
   state.exchange.transactions;
+
 export const getTransactionById =
   (id: Transaction["id"]) => (state: RootState) =>
     state.exchange.transactions.find((tr) => tr.id === id);
@@ -18,3 +19,7 @@ export const getHighest = createSelector([getTransactions], (transactions) => {
 export const getTotal = createSelector([getTransactions], (transactions) =>
   transactions.reduce((acc, tran) => acc + tran.eur, 0)
 );
+
+export const getRate = (state: RootState) => state.exchange.rate;
+
+export const getUseLiveRate = (state: RootState) => state.exchange.useLiveRate;

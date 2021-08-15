@@ -18,6 +18,8 @@ export const exchangeSlice = createSlice({
   name: "exchange",
   initialState: {
     transactions: [...sampleTran] as Transaction[], // todo
+    rate: 4,
+    useLiveRate: true,
   },
   reducers: {
     addTransaction: (state, action: PayloadAction<Transaction>) => {
