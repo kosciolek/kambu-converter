@@ -27,8 +27,6 @@ export const useLiveExchange = () => {
   const { data } = query;
 
   const exchange = useMemo(() => {
-    if (!data) return null;
-
     return ({
       amount,
       from,
