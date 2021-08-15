@@ -9,7 +9,7 @@ import { CurrencyRatesAnswer, getCurrencyRates } from "./methods";
  * @param options useQuery options
  */
 export const useCurrencyRates = ({
-  _currencies,
+  currencies: _currencies,
   ...options
 }: { currencies?: Currency[] } & QueryOptions<CurrencyRatesAnswer> = {}) =>
   useQuery<CurrencyRatesAnswer>(["exchange"], async () => getCurrencyRates(), {
