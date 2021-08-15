@@ -13,6 +13,7 @@ export const getSelf = (state: RootState) => state.exchange;
 
 export const getHighest = createSelector([getTransactions], (transactions) => {
   const copy = [...transactions];
+  /* todo More efficient, without sorting */
   return copy.sort((t1, t2) => (t1.eur < t2.eur ? 1 : -1))[0] ?? null;
 });
 
