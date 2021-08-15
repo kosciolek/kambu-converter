@@ -4,3 +4,8 @@ export const forwardCalls =
   ) =>
   (...params: Parameters<FUNC>) =>
     funcs.forEach((func) => func?.(...params));
+
+export const preciseRound = (number: number, places: number = 2) => {
+  const factor = 10 ** places;
+  return Math.round((number + Number.EPSILON) * factor) / factor;
+};
