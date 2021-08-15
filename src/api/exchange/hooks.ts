@@ -1,5 +1,7 @@
-import { useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import { QueryOptions, useQuery } from "react-query";
+import { useAppSelector } from "../../store/hooks";
+import { getRate, getUseLiveRate } from "../../store/slices/exchange/selectors";
 import { Currency, formatCurrency } from "../../utils/currency";
 import { CurrencyRatesAnswer, getCurrencyRates } from "./methods";
 
@@ -50,4 +52,37 @@ export const useLiveExchange = () => {
   }, [data]);
 
   return { exchange, ...query };
+};
+
+/**
+ * Exchanges currencies via API or the manual rate, depending on the store setting.
+ */
+export const useExchange = () => {
+  const { exchange: liveExchange, ...restLiveQuery } = useLiveExchange();
+  const manualRate = useAppSelector(getRate);
+  const isLiveRate = useAppSelector(getUseLiveRate);
+
+  const exchange = useCallback(
+    ({
+      amount,
+      from,
+      to,
+      format,
+    }: {
+      amount: number;
+      from: Currency;
+      to: Currency;
+      format?: boolean;
+    }) => {
+      if (isLiveRate) return liveExchange?.({ amount, from, to, format });
+
+      // todo supports only base -> aux exchange
+
+      const result = amount * manualRate;
+      return format ? formatCurrency(result) : result;
+    },
+    [isLiveRate, liveExchange, manualRate]
+  );
+
+  return { exchange, ...restLiveQuery };
 };
