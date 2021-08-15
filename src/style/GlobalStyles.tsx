@@ -1,7 +1,7 @@
 import { css, Global } from "@emotion/react";
 import { AppTheme } from "../theme";
 
-const styles = (_theme: AppTheme) => css`
+const styles = (theme: AppTheme) => css`
   *,
   :after,
   :before {
@@ -16,6 +16,7 @@ const styles = (_theme: AppTheme) => css`
     font-family: "Nunito", sans-serif;
     line-height: 1.4;
     overflow-y: scroll;
+    color: ${theme.color.primary700};
   }
 
   #root {
@@ -39,6 +40,7 @@ const styles = (_theme: AppTheme) => css`
   }
 
   /* Reset button */
+
   button {
     appearance: none;
     border: 0;
@@ -50,6 +52,7 @@ const styles = (_theme: AppTheme) => css`
   }
 
   /* Margin resets button */
+
   html,
   body,
   p {
