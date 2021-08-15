@@ -18,6 +18,12 @@ const styles = (_theme: AppTheme) => css`
     overflow-y: scroll;
   }
 
+  #root {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
   input {
     appearance: none;
     background-color: #00000000;
