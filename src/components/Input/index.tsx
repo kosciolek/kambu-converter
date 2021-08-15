@@ -8,10 +8,9 @@ import React, {
 import { useControlled } from "../../hooks/useControlled";
 import { useId } from "../../hooks/useId";
 import { useMergeRefs } from "../../hooks/useMergeRefs";
+import { preventDefault } from "../../utils/js";
 import { Label } from "../Label";
 import { UnstyledInput } from "../UnstyledInput";
-
-const preventDefault = (e: { preventDefault: () => any }) => e.preventDefault();
 
 export type InputProps = {
   onChange?: (e: React.ChangeEvent<HTMLInputElement>, newVal: string) => void;

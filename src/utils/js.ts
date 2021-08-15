@@ -11,3 +11,6 @@ export const preciseRound = (number: number, places: number = 2) => {
 };
 
 export const getId = () => Math.random().toString().slice(2);
+
+export const preventDefault = (e: { preventDefault: () => any }) =>
+  e.preventDefault();
