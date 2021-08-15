@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import App from "./App";
 import { Config } from "./configs/Config";
+import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 
 ReactDOM.render(
@@ -14,3 +14,9 @@ ReactDOM.render(
 );
 
 reportWebVitals();
+
+if (process.env.NODE_ENV === "development") {
+  // eslint-disable-next-line global-require
+  const { worker } = require("./mock-service-worker");
+  worker.start();
+}
