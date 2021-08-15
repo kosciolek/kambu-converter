@@ -14,6 +14,7 @@ import { useMergeRefs } from "../hooks/useMergeRefs";
 export type ButtonProps = {
   children?: ReactNode;
   labelProps?: ComponentPropsWithoutRef<typeof Label>;
+  noWave?: boolean;
 } & ComponentPropsWithoutRef<typeof Root>;
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
@@ -23,6 +24,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       children,
       onClick: onClickProp,
       variant = "text",
+      noWave = false,
       ...buttonProps
     },
     ref
@@ -30,7 +32,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     const rootRef = useRef<HTMLButtonElement | null>(null);
     const mergedRef = useMergeRefs(ref, rootRef);
 
-    const [rippleSpring, triggerRipple] = useRippleSpring(rootRef);
+    const [rippleSpring, triggerRipple] = useRippleSpring(rootRef, !noWave);
 
     return (
       <Root
@@ -46,7 +48,10 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   }
 );
 
-const useRippleSpring = (ref: RefObject<HTMLButtonElement>) => {
+const useRippleSpring = (
+  ref: RefObject<HTMLButtonElement>,
+  enabled: boolean
+) => {
   const [spring, springApi] = useSpring(() => ({
     opacity: 0,
     x: 0,
@@ -55,6 +60,7 @@ const useRippleSpring = (ref: RefObject<HTMLButtonElement>) => {
   }));
 
   const onClick = (e: React.MouseEvent) => {
+    if (!enabled) return;
     if (!ref.current) return;
 
     const { x: rootX, y: rootY } = ref.current.getBoundingClientRect();
@@ -84,11 +90,15 @@ export const UnstyledButton = styled.button`
   border: 0;
   background-color: transparent;
   font: inherit;
+  color: inherit;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
 `;
 
-const Root = styled(UnstyledButton)<{ variant?: "text" | "colored" }>`
+const Root = styled(UnstyledButton)<{
+  variant?: "text" | "colored";
+  noPadding?: boolean;
+}>`
   flex-shrink: 0;
   appearance: none;
   border: 0;
@@ -96,7 +106,8 @@ const Root = styled(UnstyledButton)<{ variant?: "text" | "colored" }>`
   font-size: inherit;
   font-family: inherit;
 
-  padding: 9px 16px; // 9px padding to offset to a 4px grid
+  padding: ${(p) =>
+    !p.noPadding && "9px 16px"}; // 9px padding to offset to a 4px grid
   text-transform: uppercase;
   font-weight: bold;
   display: inline-block;
@@ -111,6 +122,7 @@ const Root = styled(UnstyledButton)<{ variant?: "text" | "colored" }>`
     css`
       background-color: ${p.theme.color.primary400};
       color: white;
+
       &:hover {
         background-color: ${p.theme.color.primary500};
       }
