@@ -14,3 +14,6 @@ export const getId = () => Math.random().toString().slice(2);
 
 export const preventDefault = (e: { preventDefault: () => any }) =>
   e.preventDefault();
+
+export const firstToUppercase = (string: string) =>
+  string.charAt(0).toUpperCase() + string.slice(1);
