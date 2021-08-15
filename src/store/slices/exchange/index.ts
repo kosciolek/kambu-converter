@@ -30,5 +30,8 @@ export const exchangeSlice = createSlice({
         (tr) => tr.id !== action.payload
       );
     },
+    setRate: (state, action: PayloadAction<number>) => {
+      state.rate = action.payload;
+    },
   },
 });
