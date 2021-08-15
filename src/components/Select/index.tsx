@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { ReactNode, useMemo, useState } from "react";
+import { forwardRef, ReactNode, useMemo, useState } from "react";
 import { animated, useSpring } from "react-spring";
 import { useClickOutside } from "../../hooks/useClickOutside";
 import { useControlled } from "../../hooks/useControlled";
@@ -21,69 +21,74 @@ export type SelectProps = {
   label?: string;
 };
 
-export const Select = ({
-  onChange: onChangeProp,
-  value: valueProp,
-  width = "220px",
-  options,
-  label,
-  open: openProp,
-  onOpenChange: onOpenChangeProp,
-  placeholder,
-}: SelectProps) => {
-  const [value, onChange] = useControlled({
-    onChange: onChangeProp,
-    value: valueProp,
-    initial: null,
-  });
+export const Select = forwardRef<HTMLDivElement, SelectProps>(
+  (
+    {
+      onChange: onChangeProp,
+      value: valueProp,
+      width = "220px",
+      options,
+      label,
+      open: openProp,
+      onOpenChange: onOpenChangeProp,
+      placeholder,
+    },
+    ref
+  ) => {
+    const [value, onChange] = useControlled({
+      onChange: onChangeProp,
+      value: valueProp,
+      initial: null,
+    });
 
-  const [open, onOpenChange] = useControlled({
-    initial: false,
-    value: openProp,
-    onChange: onOpenChangeProp,
-  });
+    const [open, onOpenChange] = useControlled({
+      initial: false,
+      value: openProp,
+      onChange: onOpenChangeProp,
+    });
 
-  const [rootElem, setRootElem] = useState<HTMLElement | null>(null);
-  const [optionsElem, setOptionsElem] = useState<HTMLElement | null>(null);
+    const [rootElem, setRootElem] = useState<HTMLElement | null>(null);
+    const [optionsElem, setOptionsElem] = useState<HTMLElement | null>(null);
 
-  useClickOutside([{ current: rootElem }], () => onOpenChange(false));
+    useClickOutside([{ current: rootElem }], () => onOpenChange(false));
 
-  const arrowSpring = useArrowSpring(open);
+    const arrowSpring = useArrowSpring(open);
 
-  const valueNode = useMemo(
-    () =>
-      options.find((o) => o.value === value)?.render ??
-      value ?? <Placeholder>{placeholder}</Placeholder>,
-    [options, value, placeholder]
-  );
+    const valueNode = useMemo(
+      () =>
+        options.find((o) => o.value === value)?.render ??
+        value ?? <Placeholder>{placeholder}</Placeholder>,
+      [options, value, placeholder]
+    );
 
-  return (
-    <Root>
-      <StyledLabel>{label || " "}</StyledLabel>
-      <Wrapper
-        tabIndex={0}
-        width={width}
-        onClick={(e) => {
-          if (!optionsElem || !optionsElem.contains(e.target as HTMLElement))
-            onOpenChange(!open);
-        }}
-        ref={setRootElem}
-      >
-        <Value>{valueNode}</Value>
-        <Arrow style={arrowSpring} />
-        <Options
-          value={value}
-          onChange={onChange}
-          open={open}
-          options={options}
-          rootElement={rootElem}
+    return (
+      <Root ref={ref}>
+        <StyledLabel>{label || " "}</StyledLabel>
+        <Wrapper
+          tabIndex={0}
           width={width}
-          ref={setOptionsElem}
-        />
-      </Wrapper>
-    </Root>
-  );
-};
+          onClick={(e) => {
+            if (!optionsElem || !optionsElem.contains(e.target as HTMLElement))
+              onOpenChange(!open);
+          }}
+          ref={setRootElem}
+        >
+          <Value>{valueNode}</Value>
+          <Arrow style={arrowSpring} />
+          <Options
+            value={value}
+            onChange={onChange}
+            open={open}
+            options={options}
+            rootElement={rootElem}
+            width={width}
+            ref={setOptionsElem}
+          />
+        </Wrapper>
+      </Root>
+    );
+  }
+);
 
 const useArrowSpring = (open: boolean) =>
   useSpring({
