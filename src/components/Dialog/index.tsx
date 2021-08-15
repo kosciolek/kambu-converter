@@ -2,7 +2,6 @@ import styled from "@emotion/styled";
 import React, { ReactNode, useMemo, useRef, useState } from "react";
 import ReactDOM from "react-dom";
 import { animated, useTransition } from "react-spring";
-import { useClickOutside } from "../../hooks/useClickOutside";
 import { zIndex } from "../../style/const";
 
 export type DialogRenderFunc = (args: {
@@ -46,8 +45,12 @@ export const Dialog = ({ action, content, onClose }: DialogProps) => {
     },
   });
 
-  const rootRef = useRef<HTMLDivElement | null>(null);
-  useClickOutside([rootRef], () => setOpen(false));
+  const backdropRef = useRef<HTMLDivElement | null>(null);
+  const onBackdropClick = (e: React.MouseEvent) => {
+    if (e.target === backdropRef.current) {
+      dialogMethods.close();
+    }
+  };
 
   return (
     <>
@@ -56,8 +59,8 @@ export const Dialog = ({ action, content, onClose }: DialogProps) => {
         (style, show) =>
           show &&
           ReactDOM.createPortal(
-            <Backdrop style={style}>
-              <Root ref={rootRef}>{content(dialogMethods)}</Root>
+            <Backdrop ref={backdropRef} style={style} onClick={onBackdropClick}>
+              <Root>{content(dialogMethods)}</Root>
             </Backdrop>,
             document.body
           )
