@@ -100,6 +100,7 @@ const Root = styled(UnstyledButton)<{
   noPadding?: boolean;
 }>`
   flex-shrink: 0;
+  flex-grow: 0;
   appearance: none;
   border: 0;
   -webkit-tap-highlight-color: transparent;
