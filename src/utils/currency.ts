@@ -5,6 +5,8 @@ export const CURRENCY = {
   PLN: "PLN",
 } as const;
 
+export type Currency = typeof CURRENCY[keyof typeof CURRENCY];
+
 const atLeastTwoLeadingZeros = (string: string) =>
   string[1] === "." ? `0${string}` : string;
 
