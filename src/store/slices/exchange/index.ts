@@ -30,8 +30,14 @@ export const exchangeSlice = createSlice({
         (tr) => tr.id !== action.payload
       );
     },
+    removeAllTransactions: (state) => {
+      state.transactions = [];
+    },
     setRate: (state, action: PayloadAction<number>) => {
       state.rate = action.payload;
+    },
+    setUseLive: (state, action: PayloadAction<boolean>) => {
+      state.useLiveRate = action.payload;
     },
   },
 });
