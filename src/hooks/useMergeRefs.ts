@@ -1,6 +1,5 @@
 import { MutableRefObject, RefCallback, useCallback } from "react";
 
-
 /**
  * Merge multiple refs together.
  * @param refs Refs to be merged.
