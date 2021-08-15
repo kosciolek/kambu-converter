@@ -9,18 +9,15 @@ export const Txt = styled.span<{
 }>`
   color: ${(p) => p.color && p.theme.color[p.color]};
 
-  font-size: ${(p) => p.size && fontSizes[p.size]};
+  font-size: ${(p) => (p.size && fontSizes[p.size]) ?? "inherit"};
   font-weight: ${(p) => p.weight};
 `;
 
-Txt.defaultProps = {
-  size: "md",
-};
-
-export type TxtSize = "xs" | "sm" | "md" | "lg" | "xl";
+export type TxtSize = "xxs" | "xs" | "sm" | "md" | "lg" | "xl";
 
 /* TODO fluid scaling for xl? */
 const fontSizes: Record<TxtSize, string | ReturnType<typeof css>> = {
+  xxs: "12px",
   xs: "14px",
   sm: "16px",
   md: "20px",
