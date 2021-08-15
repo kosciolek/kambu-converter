@@ -17,3 +17,20 @@ export const preventDefault = (e: { preventDefault: () => any }) =>
 
 export const firstToUppercase = (string: string) =>
   string.charAt(0).toUpperCase() + string.slice(1);
+
+export const numToDate = (
+  number: number,
+  type: "datetime" | "date" | "time" = "datetime"
+) => {
+  const date = new Date(number);
+  switch (type) {
+    case "datetime":
+      return `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
+    case "date":
+      return date.toLocaleDateString();
+    case "time":
+      return date.toLocaleTimeString();
+    default:
+      throw new Error("Wrong conversion type");
+  }
+};
