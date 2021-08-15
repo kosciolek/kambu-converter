@@ -34,7 +34,7 @@ export const Config = ({ children, persist = false }: ConfigProps) => {
   node = <Provider store={store}>{node}</Provider>;
 
   /* Redux-persist */
-  node = <PersistGate persistor={persistor}>{node}</PersistGate>;
+  if (persist) node = <PersistGate persistor={persistor}>{node}</PersistGate>;
 
   /* Theme */
   node = <AppThemeProvider>{node}</AppThemeProvider>;
