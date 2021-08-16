@@ -19,10 +19,16 @@ const styles = (theme: AppTheme) => css`
     color: ${theme.color.primary700};
   }
 
+  html {
+    min-height: 100%;
+  }
+
+  html,
+  body,
   #root {
-    height: 100vh;
     display: flex;
     flex-direction: column;
+    flex-grow: 1;
   }
 
   input {
