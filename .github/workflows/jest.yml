@@ -1,0 +1,11 @@
+name: Jest
+on: push
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install deps
+        run: yarn --immutable --immutable-cache
+      - name: Run tests
+        run: yarn test
