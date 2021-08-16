@@ -1,7 +1,11 @@
 import { useCallback, useMemo } from "react";
 import { QueryOptions, useQuery } from "react-query";
 import { useAppSelector } from "../../store/hooks";
-import { getRate, getUseLiveRate } from "../../store/slices/exchange/selectors";
+import {
+  getLiveRateInterval,
+  getRate,
+  getUseLiveRate,
+} from "../../store/slices/exchange/selectors";
 import { Currency, formatCurrency } from "../../utils/currency";
 import { CurrencyRatesAnswer, getCurrencyRates } from "./methods";
 
@@ -13,11 +17,17 @@ import { CurrencyRatesAnswer, getCurrencyRates } from "./methods";
 export const useCurrencyRates = ({
   currencies: _currencies,
   ...options
-}: { currencies?: Currency[] } & QueryOptions<CurrencyRatesAnswer> = {}) =>
-  useQuery<CurrencyRatesAnswer>(["exchange"], async () => getCurrencyRates(), {
-    refetchInterval: 10000,
-    ...options,
-  });
+}: { currencies?: Currency[] } & QueryOptions<CurrencyRatesAnswer> = {}) => {
+  const interval = useAppSelector(getLiveRateInterval);
+  return useQuery<CurrencyRatesAnswer>(
+    ["exchange"],
+    async () => getCurrencyRates(),
+    {
+      refetchInterval: interval,
+      ...options,
+    }
+  );
+};
 
 /**
  * Exchanges currencies via API.
