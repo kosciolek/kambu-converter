@@ -1,22 +1,27 @@
 import styled from "@emotion/styled";
-import React, { ReactNode, useMemo, useRef, useState } from "react";
+import React, { ComponentType, useMemo, useRef, useState } from "react";
 import ReactDOM from "react-dom";
 import { animated, useTransition } from "react-spring";
 import { zIndex } from "../../style/const";
 
-export type DialogRenderFunc = (args: {
+export type DialogMethods = {
   open: () => void;
   close: () => void;
   set: (state: boolean) => void;
-}) => ReactNode;
+};
 
 export type DialogProps = {
-  action: DialogRenderFunc;
-  content: DialogRenderFunc;
+  action: ComponentType<DialogMethods>;
+  content: ComponentType<DialogMethods>;
   onClose?: () => void;
 };
 
-export const Dialog = ({ action, content, onClose }: DialogProps) => {
+/* Todo trap focus */
+export const Dialog = ({
+  action: Action,
+  content: Content,
+  onClose,
+}: DialogProps) => {
   const [open, setOpen] = useState(false);
 
   const dialogMethods = useMemo(
@@ -35,6 +40,7 @@ export const Dialog = ({ action, content, onClose }: DialogProps) => {
   );
 
   const transition = useTransition(open, {
+    key: open,
     from: { opacity: 0 },
     enter: { opacity: 1 },
     leave: { opacity: 0 },
@@ -54,13 +60,15 @@ export const Dialog = ({ action, content, onClose }: DialogProps) => {
 
   return (
     <>
-      {action(dialogMethods)}
+      <Action {...dialogMethods} />
       {transition(
         (style, show) =>
           show &&
           ReactDOM.createPortal(
             <Backdrop ref={backdropRef} style={style} onClick={onBackdropClick}>
-              <Root>{content(dialogMethods)}</Root>
+              <Root>
+                <Content {...dialogMethods} />
+              </Root>
             </Backdrop>,
             document.body
           )
