@@ -41,4 +41,14 @@ module.exports = {
     ],
   },
   plugins: ["@typescript-eslint"],
+  overrides: [
+    {
+      extends: ["plugin:cypress/recommended"],
+      files: ["cypress/**/*.js"],
+      parserOptions: {
+        /* todo fix 'Parsing error: "parserOptions.project" has been set for @typescript-eslint/parser.' when linting cypress */
+        project: "cypress/tsconfig.json",
+      },
+    },
+  ],
 };

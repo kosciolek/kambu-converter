@@ -125,7 +125,7 @@ const Contents = ({ close }: { close: () => void }) => {
       </DialogContent>
       <DialogActions>
         <Button onClick={close}>Cancel</Button>
-        <Button type="submit" variant="colored">
+        <Button data-testid="add-transaction" type="submit" variant="colored">
           Add
         </Button>
       </DialogActions>

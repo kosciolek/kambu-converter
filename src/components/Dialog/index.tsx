@@ -78,7 +78,7 @@ export const Dialog = ({
                   style={style}
                   onClick={onBackdropClick}
                 >
-                  <Root>
+                  <Root role="dialog">
                     <Content {...dialogMethods} />
                   </Root>
                 </Backdrop>,
