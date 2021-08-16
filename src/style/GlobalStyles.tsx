@@ -65,6 +65,21 @@ const styles = (theme: AppTheme) => css`
     margin: 0;
     padding: 0;
   }
+  
+  /* Scrollbar */
+  body::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px ${theme.color.primary900}11;
+    background-color: ${theme.color.primary50};
+  }
+
+  body::-webkit-scrollbar {
+    width: 10px;
+    background-color: ${theme.color.primary100};
+  }
+
+  body::-webkit-scrollbar-thumb {
+    background-color: ${theme.color.primary700};
+  }
 `;
 
 export const GlobalStyles = () => <Global styles={styles} />;
