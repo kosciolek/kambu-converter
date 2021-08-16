@@ -1,6 +1,4 @@
-import styled from "@emotion/styled";
 import { useSelector } from "react-redux";
-import { useExchange } from "../../api/exchange/hooks";
 import { getTotal } from "../../store/slices/exchange/selectors";
 import { Currency } from "./Currency";
 import { Statistic, StatisticSubtitle, StatisticTitle } from "./Statistic";

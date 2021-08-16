@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux";
-import { getAverage, getTotal } from "../../store/slices/exchange/selectors";
+import { getAverage } from "../../store/slices/exchange/selectors";
 import { Currency } from "./Currency";
 import { Statistic, StatisticSubtitle, StatisticTitle } from "./Statistic";
 
