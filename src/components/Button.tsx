@@ -36,6 +36,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
 
     return (
       <Root
+        type="button"
         ref={mergedRef}
         {...buttonProps}
         variant={variant}
