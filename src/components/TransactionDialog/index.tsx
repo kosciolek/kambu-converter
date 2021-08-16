@@ -2,8 +2,16 @@ import styled from "@emotion/styled";
 import { useCallback } from "react";
 import { useAppSelector } from "../../store/hooks";
 import { getTransactionById } from "../../store/slices/exchange/selectors";
+import { numToDate } from "../../utils/js";
 import { Button } from "../Button";
-import { Dialog, DialogActions, DialogProps, DialogTitle } from "../Dialog";
+import {
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogProps,
+  DialogTitle,
+} from "../Dialog";
+import { Txt } from "../Txt";
 import { DeleteButton } from "./DeleteButton";
 
 export type TransactionDialogProps = {
@@ -18,6 +26,13 @@ export const TransactionDialog = ({ action, id }: TransactionDialogProps) => {
     ({ close }) => (
       <>
         <DialogTitle>{tran.name}</DialogTitle>
+        <DialogContent>
+          A good place for some more <Txt color="primary600">information!</Txt>
+          <br />
+          <br />
+          Let's show the date this transaction was added as well:{" "}
+          {numToDate(tran.date, "datetime")}
+        </DialogContent>
         <DialogActions>
           <DeleteButton close={close} id={tran.id} />
           <Button onClick={close} variant="colored">
