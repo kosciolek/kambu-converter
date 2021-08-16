@@ -1,30 +1,23 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { generateSampleTransactions } from "../../../utils/generateSampleTransactions";
 import { Transaction } from "./types";
-
-/* todo remove sample */
-const generate = (): Transaction[] =>
-  Array.from({ length: 35 }).map((_, i) => {
-    const eur = Math.random() * 400;
-    return {
-      id: i.toString(),
-      date: Date.now() - 3600000 * 36 + i * 3600000 * 1,
-      eur,
-      originalPln: eur * 4.12,
-      name: (Math.random() * 23133223).toString(16),
-    };
-  });
 
 export const exchangeSlice = createSlice({
   name: "exchange",
   initialState: {
-    transactions: [...generate()] as Transaction[], // todo
+    transactions: [...generateSampleTransactions(35)] as Transaction[], // todo
     rate: 4,
     useLiveRate: true,
     liveRateInterval: 1000,
   },
   reducers: {
-    addTransaction: (state, action: PayloadAction<Transaction>) => {
-      state.transactions.push(action.payload);
+    addTransaction: (
+      state,
+      action: PayloadAction<Transaction | Transaction[]>
+    ) => {
+      if (Array.isArray(action.payload))
+        state.transactions.push(...action.payload);
+      else state.transactions.push(action.payload);
     },
     removeTransaction: (state, action: PayloadAction<Transaction["id"]>) => {
       state.transactions = state.transactions.filter(
