@@ -8,16 +8,19 @@ import {
   getTransactionsEmpty,
 } from "../../../store/slices/exchange/selectors";
 import { Transaction } from "../../../store/slices/exchange/types";
-import { contentWidth } from "../../../style/const";
 import { formatCurrency } from "../../../utils/currency";
 import { Button } from "../../Button";
+import { Content } from "../../Content";
 import { TransactionDialog } from "../../TransactionDialog";
 import { Txt } from "../../Txt";
+import { Empty } from "../Empty";
 import moreIcon from "./more.png";
 import { SortDirIcon } from "./SortDirIcon";
 
 export const TransactionTable = () => {
-  const { exchange } = useExchange();
+  const { exchange } = useExchange({
+    notifyOnChangeProps: ["data"],
+  });
 
   const columns = useMemo<Column<Transaction>[]>(
     () => [
@@ -26,6 +29,7 @@ export const TransactionTable = () => {
         accessor: "name",
       },
       {
+        id: "date",
         Header: "Date",
         accessor: (row) => {
           const date = new Date(row.date);
@@ -107,69 +111,75 @@ export const TransactionTable = () => {
       {
         columns,
         data: transactions,
+        initialState: {
+          sortBy: [
+            {
+              id: "date",
+              desc: true,
+            },
+          ],
+        } as any,
       },
       useSortBy
     );
 
   return (
-    <Root>
-      <Table {...getTableProps()} style={{ userSelect: "none" }}>
-        <thead>
-          {headerGroups.map((headerGroup) => (
-            <tr {...headerGroup.getHeaderGroupProps()}>
-              {headerGroup.headers.map((column: any) => {
-                const getColDir = () => {
-                  if (!column.isSorted) return "none";
-                  if (column.isSortedDesc) return "desc";
-                  return "asc";
-                };
+    <Content>
+      <Root>
+        <Table {...getTableProps()} style={{ userSelect: "none" }}>
+          <thead>
+            {headerGroups.map((headerGroup) => (
+              <tr {...headerGroup.getHeaderGroupProps()}>
+                {headerGroup.headers.map((column: any) => {
+                  const getColDir = () => {
+                    if (!column.isSorted) return "none";
+                    if (column.isSortedDesc) return "desc";
+                    return "asc";
+                  };
 
-                return (
-                  /* todo Make useTable aware of the sort plugin
-                   * presumably has something to do with
-                   * https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/react-table
-                   * but I didn't manage it */
-                  <Th
-                    align="left"
-                    {...column.getHeaderProps(column.getSortByToggleProps())}
-                  >
-                    {column.render("Header")}
+                  return (
+                    /* todo Make useTable aware of the sort plugin
+                     * presumably has something to do with
+                     * https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/react-table
+                     * but I didn't manage it, the above only types useTable args */
+                    <Th
+                      align="left"
+                      {...column.getHeaderProps(column.getSortByToggleProps())}
+                    >
+                      {column.render("Header")}
 
-                    <SortDirIcon dir={getColDir()} />
-                  </Th>
-                );
-              })}
-            </tr>
-          ))}
-        </thead>
-        <tbody {...getTableBodyProps()}>
-          {rows.map((row) => {
-            prepareRow(row);
-            return (
-              <Tr {...row.getRowProps()}>
-                {row.cells.map((cell) => (
-                  <Td align="left" {...cell.getCellProps()}>
-                    {cell.render("Cell")}
-                  </Td>
-                ))}
-              </Tr>
-            );
-          })}
-        </tbody>
-      </Table>
-      {noTransactions && <Empty>No transactions</Empty>}
-    </Root>
+                      <SortDirIcon dir={getColDir()} />
+                    </Th>
+                  );
+                })}
+              </tr>
+            ))}
+          </thead>
+          <tbody {...getTableBodyProps()}>
+            {rows.map((row) => {
+              prepareRow(row);
+              return (
+                <Tr {...row.getRowProps()}>
+                  {row.cells.map((cell) => (
+                    <Td align="left" {...cell.getCellProps()}>
+                      {cell.render("Cell")}
+                    </Td>
+                  ))}
+                </Tr>
+              );
+            })}
+          </tbody>
+        </Table>
+        {noTransactions && <Empty>No transactions</Empty>}
+      </Root>
+    </Content>
   );
 };
 
 export const Root = styled.div`
   padding: 24px;
   box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.25); // todo
-  flex-grow: 1;
-
-  margin: 0 auto 24px auto;
-  max-width: ${contentWidth};
-  width: 100%;
+  margin: 0 24px 24px 24px;
 `;
 
 const Table = styled.table`
@@ -198,12 +208,4 @@ export const Tr = styled.tr`
   & > ${Td} {
     padding: 4px 0;
   }
-`;
-
-export const Empty = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 32px 0;
-  color: ${({ theme: t }) => t.color.primary500};
 `;
