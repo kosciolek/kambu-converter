@@ -24,6 +24,17 @@ export const getTotal = createSelector([getTransactions], (transactions) =>
   transactions.reduce((acc, tran) => acc + tran.eur, 0)
 );
 
+export const getTransactionCount = (state: RootState) =>
+  state.exchange.transactions.length;
+
+export const getAverage = createSelector(
+  [getTotal, getTransactionCount],
+  (total, count) => total / count
+);
+
 export const getRate = (state: RootState) => state.exchange.rate;
 
 export const getUseLiveRate = (state: RootState) => state.exchange.useLiveRate;
+
+export const getLiveRateInterval = (state: RootState) =>
+  state.exchange.liveRateInterval;

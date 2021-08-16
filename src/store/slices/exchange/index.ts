@@ -20,6 +20,7 @@ export const exchangeSlice = createSlice({
     transactions: [...generate()] as Transaction[], // todo
     rate: 4,
     useLiveRate: true,
+    liveRateInterval: 1000,
   },
   reducers: {
     addTransaction: (state, action: PayloadAction<Transaction>) => {
@@ -38,6 +39,10 @@ export const exchangeSlice = createSlice({
     },
     setUseLive: (state, action: PayloadAction<boolean>) => {
       state.useLiveRate = action.payload;
+    },
+
+    setLiveRateInterval: (state, action: PayloadAction<number>) => {
+      state.liveRateInterval = action.payload;
     },
   },
 });
