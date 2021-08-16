@@ -1,4 +1,4 @@
-export const contentWidth = "1150px";
+export const contentWidth = "1350px";
 
 export const zIndex = {
   dialog: 200,
