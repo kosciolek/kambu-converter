@@ -4,9 +4,11 @@ import { Config } from "./configs/Config";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 
+const persist = process.env.NODE_ENV !== "development";
+
 ReactDOM.render(
   <React.StrictMode>
-    <Config persist>
+    <Config persist={persist}>
       <App />
     </Config>
   </React.StrictMode>,
