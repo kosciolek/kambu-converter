@@ -8,8 +8,8 @@ import React, {
   useRef,
 } from "react";
 import { animated, useSpring } from "react-spring";
-import { forwardCalls } from "../utils/js";
-import { useMergeRefs } from "../hooks/useMergeRefs";
+import { forwardCalls } from "../../utils/js";
+import { useMergeRefs } from "../../hooks/useMergeRefs";
 
 export type ButtonProps = {
   children?: ReactNode;

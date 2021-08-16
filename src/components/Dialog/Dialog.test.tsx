@@ -8,7 +8,7 @@ import { Config } from "../../configs/Config";
 import { Dialog } from "./index";
 
 describe("Dialog", () => {
-  it("Opens and closes", async () => {
+  it("opens and closes", async () => {
     render(
       <Dialog
         action={({ open }) => (
