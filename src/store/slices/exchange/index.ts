@@ -1,23 +1,23 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Transaction } from "./types";
 
-/* TODO Remove sample transactions */
-const sampleTran: Transaction[] = [
-  { id: "23", date: Date.now(), eur: 20, originalPln: 80, name: "Corp S.A." },
-  {
-    id: "2233",
-    date: Date.now(),
-    eur: 30,
-    originalPln: 120,
-    name: "Something",
-  },
-  { id: "2343", date: Date.now(), eur: 40, originalPln: 160, name: "Highest" },
-];
+/* todo remove sample */
+const generate = (): Transaction[] =>
+  Array.from({ length: 35 }).map((_, i) => {
+    const eur = Math.random() * 400;
+    return {
+      id: i.toString(),
+      date: Date.now() - 3600000 * 36 + i * 3600000 * 1,
+      eur,
+      originalPln: eur * 4.12,
+      name: (Math.random() * 23133223).toString(16),
+    };
+  });
 
 export const exchangeSlice = createSlice({
   name: "exchange",
   initialState: {
-    transactions: [...sampleTran] as Transaction[], // todo
+    transactions: [...generate()] as Transaction[], // todo
     rate: 4,
     useLiveRate: true,
   },
