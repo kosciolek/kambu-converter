@@ -1,5 +1,5 @@
 import { useCallback, useMemo } from "react";
-import { QueryOptions, useQuery } from "react-query";
+import { useQuery, UseQueryOptions } from "react-query";
 import { useAppSelector } from "../../store/hooks";
 import {
   getLiveRateInterval,
@@ -16,15 +16,18 @@ import { CurrencyRatesAnswer, getCurrencyRates } from "./methods";
  */
 export const useCurrencyRates = ({
   currencies: _currencies,
-  ...options
-}: { currencies?: Currency[] } & QueryOptions<CurrencyRatesAnswer> = {}) => {
+  queryOptions,
+}: {
+  currencies?: Currency[];
+  queryOptions?: UseQueryOptions<CurrencyRatesAnswer>;
+} = {}) => {
   const interval = useAppSelector(getLiveRateInterval);
   return useQuery<CurrencyRatesAnswer>(
     ["exchange"],
     async () => getCurrencyRates(),
     {
       refetchInterval: interval,
-      ...options,
+      ...queryOptions,
     }
   );
 };
@@ -32,8 +35,10 @@ export const useCurrencyRates = ({
 /**
  * Exchanges currencies via API.
  */
-export const useLiveExchange = () => {
-  const query = useCurrencyRates();
+export const useLiveExchange = (
+  queryOptions?: UseQueryOptions<CurrencyRatesAnswer>
+) => {
+  const query = useCurrencyRates({ queryOptions });
   const { data } = query;
 
   const exchange = useMemo(
@@ -67,8 +72,11 @@ export const useLiveExchange = () => {
 /**
  * Exchanges currencies via API or the manual rate, depending on the store setting.
  */
-export const useExchange = () => {
-  const { exchange: liveExchange, ...restLiveQuery } = useLiveExchange();
+export const useExchange = (
+  queryOptions?: UseQueryOptions<CurrencyRatesAnswer>
+) => {
+  const { exchange: liveExchange, ...restLiveQuery } =
+    useLiveExchange(queryOptions);
   const manualRate = useAppSelector(getRate);
   const isLiveRate = useAppSelector(getUseLiveRate);
 
