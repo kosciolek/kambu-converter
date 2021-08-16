@@ -8,7 +8,6 @@ import React, {
 import { useControlled } from "../../hooks/useControlled";
 import { useId } from "../../hooks/useId";
 import { useMergeRefs } from "../../hooks/useMergeRefs";
-import { preventDefault } from "../../utils/js";
 import { Label } from "../Label";
 import { UnstyledInput } from "../UnstyledInput";
 
@@ -45,8 +44,11 @@ export const Input = forwardRef<HTMLDivElement, InputProps>(
     const inputRef = useRef<HTMLInputElement | null>(null);
 
     const mergedInputRef = useMergeRefs(inputRef, inputRefProp);
-    const onRootClick = () => {
-      inputRef.current?.focus();
+    const forceFocus = (e: React.MouseEvent) => {
+      if (e.target !== inputRef.current) {
+        inputRef.current?.focus();
+        e.preventDefault();
+      }
     };
 
     const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -58,12 +60,12 @@ export const Input = forwardRef<HTMLDivElement, InputProps>(
     const inputId = `input-${id}`;
 
     return (
-      <Root ref={ref} className={className} onMouseDown={preventDefault}>
+      <Root ref={ref} className={className} onClick={forceFocus}>
         <Upper>
           <StyledLabel htmlFor={inputId}>{label || " "}</StyledLabel>
           <Error>{error || " "}</Error>
         </Upper>
-        <InputWrapper error={Boolean(error)} onClick={onRootClick}>
+        <InputWrapper error={Boolean(error)} onClick={forceFocus}>
           <StyledInput
             id={inputId}
             {...inputProps}

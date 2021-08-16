@@ -65,7 +65,7 @@ const styles = (theme: AppTheme) => css`
     margin: 0;
     padding: 0;
   }
-  
+
   /* Scrollbar */
   body::-webkit-scrollbar-track {
     -webkit-box-shadow: inset 0 0 6px ${theme.color.primary900}11;
