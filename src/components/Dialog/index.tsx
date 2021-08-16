@@ -1,5 +1,11 @@
 import styled from "@emotion/styled";
-import React, { ComponentType, useMemo, useRef, useState } from "react";
+import React, {
+  ComponentType,
+  Fragment,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import ReactDOM from "react-dom";
 import { animated, useTransition } from "react-spring";
 import { zIndex } from "../../style/const";
@@ -63,14 +69,22 @@ export const Dialog = ({
       <Action {...dialogMethods} />
       {transition(
         (style, show) =>
-          show &&
-          ReactDOM.createPortal(
-            <Backdrop ref={backdropRef} style={style} onClick={onBackdropClick}>
-              <Root>
-                <Content {...dialogMethods} />
-              </Root>
-            </Backdrop>,
-            document.body
+          show && (
+            <>
+              {ReactDOM.createPortal(
+                <Backdrop
+                  key={show.toString()}
+                  ref={backdropRef}
+                  style={style}
+                  onClick={onBackdropClick}
+                >
+                  <Root>
+                    <Content {...dialogMethods} />
+                  </Root>
+                </Backdrop>,
+                document.body
+              )}
+            </>
           )
       )}
     </>
