@@ -1,6 +1,7 @@
 import styled from "@emotion/styled";
 import React from "react";
 import { Controls } from "./components/Controls";
+import { Notifications } from "./components/Notifications";
 import { Statistics } from "./components/Statistics";
 import { Topbar } from "./components/Topbar";
 import { Transactions } from "./components/Transactions";
@@ -8,18 +9,21 @@ import { media } from "./style/media";
 
 function App() {
   return (
-    <Layout>
-      <div style={{ gridArea: "top" }}>
-        <Topbar />
-      </div>
-      <div style={{ gridArea: "statistics" }}>
-        <Statistics />
-      </div>
-      <div style={{ gridArea: "content" }}>
-        <Controls />
-        <Transactions />
-      </div>
-    </Layout>
+    <>
+      <Notifications />
+      <Layout>
+        <div style={{ gridArea: "top" }}>
+          <Topbar />
+        </div>
+        <div style={{ gridArea: "statistics" }}>
+          <Statistics />
+        </div>
+        <div style={{ gridArea: "content" }}>
+          <Controls />
+          <Transactions />
+        </div>
+      </Layout>
+    </>
   );
 }
 

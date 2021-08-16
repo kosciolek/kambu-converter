@@ -2,6 +2,7 @@ import styled from "@emotion/styled";
 import React from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useExchange } from "../../api/exchange/hooks";
+import { useNotification } from "../../hooks/notifications";
 import { useAppDispatch } from "../../store/hooks";
 import { exchangeSlice } from "../../store/slices/exchange";
 import { getId } from "../../utils/js";
@@ -34,8 +35,16 @@ const Contents = ({ close }: { close: () => void }) => {
     formState: { errors },
   } = useForm<AddData>();
 
+  const makeNotification = useNotification();
+
   const onSubmit = ({ amount: amountString, currency, name }: AddData) => {
     const amount = Number(amountString);
+
+    makeNotification({
+      title: "Transaction added",
+      content: name,
+    });
+
     dispatch(
       exchangeSlice.actions.addTransaction({
         id: getId(),

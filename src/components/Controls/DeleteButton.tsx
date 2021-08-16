@@ -1,14 +1,36 @@
 import React from "react";
-import { useAppDispatch } from "../../store/hooks";
+import { useNotification } from "../../hooks/notifications";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { exchangeSlice } from "../../store/slices/exchange";
+import { getTransactionCount } from "../../store/slices/exchange/selectors";
 import { Button } from "../Button";
 import { Dialog, DialogActions, DialogContent, DialogTitle } from "../Dialog";
 import { Txt } from "../Txt";
 
 export const DeleteButton = () => {
   const dispatch = useAppDispatch();
-  const deleteAll = () =>
+  const tranAmount = useAppSelector(getTransactionCount);
+
+  const makeNotification = useNotification();
+
+  const deleteAll = () => {
+    makeNotification(
+      tranAmount
+        ? {
+            title: "A catastrophe!",
+            content: (
+              <>
+                You've just deleted <Txt>ALL</Txt> the transactions!
+              </>
+            ),
+          }
+        : {
+            title: "No transactions",
+            content: "Nothing to delete.",
+          }
+    );
     dispatch(exchangeSlice.actions.removeAllTransactions());
+  };
 
   return (
     <Dialog

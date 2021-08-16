@@ -1,4 +1,5 @@
 import { useCallback } from "react";
+import { useNotification } from "../../hooks/notifications";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { exchangeSlice } from "../../store/slices/exchange";
 import { getTransactionById } from "../../store/slices/exchange/selectors";
@@ -15,8 +16,15 @@ export const DeleteButton = ({ id, close: outerClose }: DeleteButtonProps) => {
   const dispatch = useAppDispatch();
   const tran = useAppSelector(getTransactionById(id))!;
 
+  const makeNotification = useNotification();
+
   const onDeleteClick = () => {
+    makeNotification({
+      title: "Deleted",
+      content: `Deleted transaction ${tran.name}`,
+    });
     dispatch(exchangeSlice.actions.removeTransaction(id));
+
     outerClose();
   };
 

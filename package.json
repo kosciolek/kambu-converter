@@ -33,6 +33,7 @@
     "eslint-plugin-react-hooks": "^4.2.0",
     "husky": "^7.0.1",
     "ky": "^0.28.5",
+    "mitt": "^3.0.0",
     "msw": "^0.34.0",
     "prettier": "^2.3.2",
     "react": "^17.0.2",
