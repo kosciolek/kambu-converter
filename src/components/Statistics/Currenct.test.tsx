@@ -42,7 +42,7 @@ describe("Currency", () => {
     await screen.findByText("08.40");
   });
 
-  it.skip("displays exchanged via live rate", async () => {
+  it("displays exchanged via live rate", async () => {
     render(<Currency eur={2} />, {
       wrapper: createConfig({
         initialState: {

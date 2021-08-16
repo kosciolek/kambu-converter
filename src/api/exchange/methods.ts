@@ -15,9 +15,11 @@ export const getCurrencyRates = ({
 
   if (currencies) searchParams.symbols = currencies.join(",");
 
+  /* Cannot use short form because of
+  * https://github.com/sindresorhus/ky/issues/372 */
   return currencyApi
     .get("latest", {
       searchParams,
     })
-    .json<CurrencyRatesAnswer>();
+    .then((resp) => resp.json());
 };
