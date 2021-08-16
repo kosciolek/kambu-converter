@@ -2,6 +2,8 @@
   "name": "kambu-converter",
   "version": "0.1.0",
   "private": true,
+  "author": "kosciolek <juliusz@kosciolek.dev>",
+  "license": "MIT",
   "dependencies": {
     "@emotion/react": "^11.4.1",
     "@emotion/styled": "^11.3.0",
