@@ -1,5 +1,6 @@
 import styled from "@emotion/styled";
-import React, { useState } from "react";
+import React from "react";
+import { Controller, useForm } from "react-hook-form";
 import { useExchange } from "../../api/exchange/hooks";
 import { useAppDispatch } from "../../store/hooks";
 import { exchangeSlice } from "../../store/slices/exchange";
@@ -9,104 +10,126 @@ import { Dialog, DialogActions, DialogContent, DialogTitle } from "../Dialog";
 import { Input } from "../Input";
 import { Select } from "../Select";
 
-export const AddButton = () => {
+type AddData = { name: string; amount: string; currency: "EUR" | "PLN" };
+
+export const AddDialog = () => (
+  <Dialog
+    action={({ open }) => (
+      <Button onClick={open} variant="colored">
+        Add
+      </Button>
+    )}
+    content={Contents}
+  />
+);
+
+const Contents = ({ close }: { close: () => void }) => {
   const dispatch = useAppDispatch();
-  const [name, setName] = useState("");
-  const [amount, setAmount] = useState("10");
-  const [amountError, setAmountError] = useState("");
-  const [currency, setCurrency] = useState("EUR");
-  /* TODO Move to react-hook-form */
 
   const { exchange } = useExchange();
 
-  const add = (close: Function) => {
-    if (!Number.isNaN(Number(amount))) {
-      dispatch(
-        exchangeSlice.actions.addTransaction({
-          id: getId(),
-          name,
-          date: Date.now(),
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<AddData>();
 
-          ...(currency === "EUR"
-            ? {
-                eur: Number(amount),
-                originalPln: exchange({
-                  from: "EUR",
-                  to: "PLN",
-                  amount: Number(amount),
-                })! as number,
-              }
-            : {
-                originalPln: Number(amount),
-                eur: exchange({
-                  from: "PLN",
-                  to: "EUR",
-                  amount: Number(amount),
-                })! as number,
-              }),
-        })
-      );
-      close();
-    } else {
-      setAmountError("Incorrect amount.");
-    }
-  };
-
-  const clean = () => {
-    setName("");
-    setAmount("");
+  const onSubmit = ({ amount: amountString, currency, name }: AddData) => {
+    const amount = Number(amountString);
+    dispatch(
+      exchangeSlice.actions.addTransaction({
+        id: getId(),
+        name,
+        date: Date.now(),
+        ...(currency === "EUR"
+          ? {
+              eur: Number(amount),
+              originalPln: exchange({
+                from: "EUR",
+                to: "PLN",
+                amount,
+              })! as number,
+            }
+          : {
+              originalPln: amount,
+              eur: exchange({
+                from: "PLN",
+                to: "EUR",
+                amount,
+              })! as number,
+            }),
+      })
+    );
   };
 
   return (
-    <Dialog
-      onClose={clean}
-      action={({ open }) => (
-        <Button onClick={open} variant="colored">
-          Add
-        </Button>
-      )}
-      content={({ close }) => (
-        <>
-          <DialogTitle>Add transaction</DialogTitle>
-          <DialogContent>
-            <Content>
+    <form
+      onSubmit={handleSubmit((data) => {
+        onSubmit(data);
+        close();
+      })}
+    >
+      <DialogTitle>Add transaction</DialogTitle>
+      <DialogContent>
+        <Content>
+          <Controller
+            name="name"
+            control={control}
+            rules={{
+              required: true,
+              maxLength: 15,
+              minLength: 1,
+            }}
+            render={({ field: { ref, ...rest } }) => (
               <Input
+                inputRef={ref}
+                {...rest}
+                placeholder="My Company"
                 label="Name"
-                value={name}
-                onChange={(_, val) => setName(val)}
+                error={errors.name && "Incorrect name"}
               />
+            )}
+          />
+          <Controller
+            name="amount"
+            control={control}
+            rules={{
+              required: true,
+              pattern: /^\d*(\.\d\d?)?$/,
+              validate: (val) => !Number.isNaN(Number(val)),
+            }}
+            render={({ field: { ref, ...rest } }) => (
               <Input
-                error={amountError}
+                inputRef={ref}
+                {...rest}
+                placeholder="12.34"
                 label="Amount"
-                value={String(amount)}
-                onChange={(_, val) => {
-                  setAmount(val);
-                  setAmountError("");
-                }}
+                error={errors.amount && "Incorrect amount"}
               />
+            )}
+          />
+          <Controller
+            name="currency"
+            control={control}
+            defaultValue="EUR"
+            render={({ field }) => (
               <Select
+                {...field}
                 label="Currency"
-                value={currency}
-                onChange={(val) => setCurrency(val as string)}
                 placeholder="Currency"
                 options={[{ value: "EUR" }, { value: "PLN" }]}
               />
-            </Content>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={close}>Cancel</Button>
-            <Button
-              variant="colored"
-              onClick={() => {
-                add(close);
-              }}
-            >
-              Add
-            </Button>
-          </DialogActions>
-        </>
-      )}
-    />
+            )}
+          />
+        </Content>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={close}>Cancel</Button>
+        <Button type="submit" variant="colored">
+          Add
+        </Button>
+      </DialogActions>
+    </form>
   );
 };
 

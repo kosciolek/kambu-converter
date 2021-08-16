@@ -2,7 +2,7 @@ import styled from "@emotion/styled";
 import React from "react";
 import { media } from "../../style/media";
 import { Content } from "../Content";
-import { AddButton } from "./AddButton";
+import { AddDialog } from "./AddDialog";
 import { DeleteButton } from "./DeleteButton";
 import { LastUpdated } from "./LastUpdated";
 
@@ -12,7 +12,7 @@ export const Controls = () => (
       <LastUpdated />
       <Buttons>
         <DeleteButton />
-        <AddButton />
+        <AddDialog />
       </Buttons>
     </Root>
   </Content>

@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import React, { useState } from "react";
+import React from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { exchangeSlice } from "../../store/slices/exchange";
@@ -8,7 +8,6 @@ import {
   getRate,
   getUseLiveRate,
 } from "../../store/slices/exchange/selectors";
-import { adaptInput } from "../../utils/react-hook-form";
 import { Button } from "../Button";
 import { Dialog, DialogActions, DialogContent, DialogTitle } from "../Dialog";
 import { Input } from "../Input";
@@ -19,18 +18,16 @@ type SettingsData = {
   liveRefreshInterval: string;
   rateSource: "manual" | "live";
 };
-export const Settings = () => {
-  return (
-    <Dialog
-      action={({ open }) => (
-        <Button onClick={open} variant="colored">
-          Settings
-        </Button>
-      )}
-      content={Contents}
-    />
-  );
-};
+export const Settings = () => (
+  <Dialog
+    action={({ open }) => (
+      <Button onClick={open} variant="colored">
+        Settings
+      </Button>
+    )}
+    content={Contents}
+  />
+);
 
 const Contents = ({ close }: { close: Function }) => {
   const dispatch = useAppDispatch();
@@ -41,9 +38,7 @@ const Contents = ({ close }: { close: Function }) => {
 
   const {
     control,
-    register,
     handleSubmit,
-    reset,
     formState: { errors },
   } = useForm<SettingsData>({
     defaultValues: {
@@ -76,7 +71,7 @@ const Contents = ({ close }: { close: Function }) => {
       <StyledDialogContent>
         <DialogTitle>Settings</DialogTitle>
         <Controller
-          name={"manualRate"}
+          name="manualRate"
           control={control}
           rules={{
             min: 0,
